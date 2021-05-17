@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "outDir": "./dist/js",
+    "removeComments": false,
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "lib": ["ES2020", "dom"],
+    "target": "ES6",
+    "types": [],
+  },
+  "compileOnSave": true,
+  "exclude": [
+    "node_modules/*",
+    "**/*-aot.ts"
+  ]
+}
