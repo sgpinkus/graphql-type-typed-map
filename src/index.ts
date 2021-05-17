@@ -2,16 +2,18 @@ import { GraphQLScalarType } from 'graphql';
 import { Kind, ValueNode, ObjectValueNode, print } from 'graphql/language';
 import 'core-js/features/set'; // eslint-disable-line
 
+export class GraphQLTypedMapTypeTypeError extends TypeError {};
+
 function ensureObject(value: any, allowedKeys?: any, valueType?: any) {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-    throw new TypeError(
+    throw new GraphQLTypedMapTypeTypeError(
       `Cannot represent non-object value: ${value}`,
     );
   }
   if(allowedKeys) {
     const keys: any = new Set(Object.keys(value));
     if (!allowedKeys.isSupersetOf(keys)) {
-      throw new TypeError(
+      throw new GraphQLTypedMapTypeTypeError(
         `Found unknown fields: ${Array.from(keys.difference(allowedKeys)).join()}`,
       );
     }
@@ -56,8 +58,8 @@ function _parseLiteral(typeName: string, ast: ValueNode, variables: any): any {
   }
 }
 
-export const MyMap = (allowedKeys?: string[], valueType?: any) => {
-  const name = 'MyMap';
+export const GraphQLTypedMapType = (allowedKeys?: string[], valueType?: any) => {
+  const name = 'GraphQLTypedMapType';
   const _allowedKeys: Set<string> | undefined = allowedKeys && new Set(allowedKeys); // eslint-disable-line
   return new GraphQLScalarType({
     name,
@@ -66,7 +68,7 @@ export const MyMap = (allowedKeys?: string[], valueType?: any) => {
     parseValue: (value) => ensureObject(value, _allowedKeys, valueType),
     parseLiteral: (ast, variables) => {
       if (ast.kind !== Kind.OBJECT) {
-        throw new TypeError(
+        throw new GraphQLTypedMapTypeTypeError(
           `${name} cannot represent non-object value: ${print(ast)}`,
         );
       }

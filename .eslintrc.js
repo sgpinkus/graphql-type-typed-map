@@ -3,6 +3,7 @@ module.exports = {
         "node": true,
         "commonjs": true,
         "es2021": true,
+        "mocha": true,
     },
     "extends": [
         "eslint:recommended",
@@ -26,5 +27,6 @@ module.exports = {
           functions: 'always-multiline',
         },
       ],
+      "@typescript-eslint/no-var-requires": 0,
     },
 };
