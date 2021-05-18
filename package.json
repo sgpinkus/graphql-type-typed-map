@@ -1,12 +1,13 @@
 {
   "name": "graphql-type-typed-map",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "files": [
     "dist/"
   ],
   "main": "dist/js/index.js",
   "module": "dist/es/index.js",
+  "types": "dist/typings/index.d.ts",
   "scripts": {
     "build": "npm-run-all clean -p build:js build:es",
     "build:es": "tsc -b tsconfig.es.json",
