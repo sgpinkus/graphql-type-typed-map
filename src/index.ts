@@ -58,8 +58,7 @@ function _parseLiteral(typeName: string, ast: ValueNode, variables: any): any {
   }
 }
 
-export const GraphQLTypedMapType = (allowedKeys?: string[], valueType?: any) => {
-  const name = 'GraphQLTypedMapType';
+export const GraphQLTypedMapType = (name: string = 'GraphQLTypedMapType', allowedKeys?: string[], valueType?: any) => {
   const _allowedKeys: Set<string> | undefined = allowedKeys && new Set(allowedKeys); // eslint-disable-line
   return new GraphQLScalarType({
     name,

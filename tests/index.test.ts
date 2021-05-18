@@ -41,25 +41,25 @@ function createHelloSchema(type: GraphQLScalarType) {
   }
 
   @test async 'valid no keys constraint and type constraint'() {
-    const { data, errors } = await graphql(createHelloSchema(GraphQLTypedMapType(undefined, GraphQLString)), '{ hello(a: { k: "3" }) }');
+    const { data, errors } = await graphql(createHelloSchema(GraphQLTypedMapType(undefined, undefined, GraphQLString)), '{ hello(a: { k: "3" }) }');
     expect(data?.hello).equals('hello');
     expect(errors).is.undefined;
   }
 
   @test async 'invalid type'() {
-    const { data, errors } = await graphql(createHelloSchema(GraphQLTypedMapType(undefined, GraphQLInt)), '{ hello(a: { k: "3" }) }');
+    const { data, errors } = await graphql(createHelloSchema(GraphQLTypedMapType(undefined, undefined, GraphQLInt)), '{ hello(a: { k: "3" }) }');
     expect(data).is.undefined;
     expect(errors?.length).equals(1);
   }
 
   @test async 'invalid disallowed key'() {
-    const { data, errors } = await graphql(createHelloSchema(GraphQLTypedMapType(['j'])), '{ hello(a: { k: "3" }) }');
+    const { data, errors } = await graphql(createHelloSchema(GraphQLTypedMapType(undefined, ['j'])), '{ hello(a: { k: "3" }) }');
     expect(data).is.undefined;
     expect(errors?.length).equals(1);
   }
 
   @test async 'invalid key when no keys allowed'() {
-    const { data, errors } = await graphql(createHelloSchema(GraphQLTypedMapType([])), '{ hello(a: { k: "3" }) }');
+    const { data, errors } = await graphql(createHelloSchema(GraphQLTypedMapType(undefined, [])), '{ hello(a: { k: "3" }) }');
     expect(data).is.undefined;
     expect(errors?.length).equals(1);
   }
