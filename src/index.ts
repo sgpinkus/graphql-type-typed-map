@@ -1,20 +1,22 @@
-import { GraphQLScalarType } from 'graphql';
+import { GraphQLScalarType, GraphQLEnumType } from 'graphql';
 import { Kind, ValueNode, ObjectValueNode, print } from 'graphql/language';
-import 'core-js/features/set'; // eslint-disable-line
+import Set from 'core-js-pure/features/set';
 
-export class GraphQLTypedMapTypeTypeError extends TypeError {};
+export class GraphQLTypedMapTypeTypeError extends TypeError {}
 
-function ensureObject(value: any, allowedKeys?: any, valueType?: any) {
+type ValueType = GraphQLScalarType | GraphQLEnumType; // TODO: more types?
+
+function ensureObject(value: unknown, allowedKeys?: Set<string>, valueType?: ValueType) {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
     throw new GraphQLTypedMapTypeTypeError(
       `Cannot represent non-object value: ${value}`,
     );
   }
   if(allowedKeys) {
-    const keys: any = new Set(Object.keys(value));
+    const keys: Set<string> = new Set(Object.keys(value));
     if (!allowedKeys.isSupersetOf(keys)) {
       throw new GraphQLTypedMapTypeTypeError(
-        `Found unknown fields: ${Array.from(keys.difference(allowedKeys)).join()}`,
+        `Found unknown fields: ${Array.from(keys.difference(allowedKeys) as unknown as ArrayLike<unknown>).join()}`,
       );
     }
   }
@@ -27,7 +29,7 @@ function ensureObject(value: any, allowedKeys?: any, valueType?: any) {
 /**
  * Recursively turn arbitrary GraphQL AST object into an object. Returns an plain object.
  */
-function _parseObject(typeName: string, ast: ObjectValueNode, variables: any): object {
+function _parseObject(typeName: string, ast: ObjectValueNode, variables: unknown): unknown {
   const value = Object.create(null);
   ast.fields.forEach((field) => {
     // eslint-disable-next-line no-use-before-define
@@ -37,7 +39,7 @@ function _parseObject(typeName: string, ast: ObjectValueNode, variables: any): o
 }
 
 
-function _parseLiteral(typeName: string, ast: ValueNode, variables: any): any {
+function _parseLiteral(typeName: string, ast: ValueNode, variables: unknown): unknown {
   switch (ast.kind) {
     case Kind.STRING:
     case Kind.BOOLEAN:
@@ -52,13 +54,13 @@ function _parseLiteral(typeName: string, ast: ValueNode, variables: any): any {
     case Kind.NULL:
       return null;
     case Kind.VARIABLE:
-      return variables ? variables[ast.name.value] : undefined;
+      return variables ? (variables as Record<string, unknown>)[ast.name.value] : undefined;
     default:
       throw new TypeError(`${typeName} cannot represent value: ${print(ast)}`);
   }
 }
 
-export const GraphQLTypedMapType = (name: string = 'GraphQLTypedMapType', allowedKeys?: string[], valueType?: any) => {
+export const GraphQLTypedMapType = (name = 'GraphQLTypedMapType', allowedKeys?: string[], valueType?: ValueType): GraphQLScalarType => {
   const _allowedKeys: Set<string> | undefined = allowedKeys && new Set(allowedKeys); // eslint-disable-line
   return new GraphQLScalarType({
     name,

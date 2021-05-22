@@ -7,7 +7,8 @@ import {
   GraphQLInt,
   GraphQLSchema,
   GraphQLObjectType,
-  GraphQLScalarType
+  GraphQLScalarType,
+  GraphQLEnumType,
 } from 'graphql';
 import { GraphQLTypedMapType } from '../src/index';
 
@@ -26,14 +27,25 @@ function createHelloSchema(type: GraphQLScalarType) {
           resolve: () => 'hello',
         },
       },
-    })
+    }),
   });
 }
 
-@suite class TestGraphQLTypedMapType {
-  before() {
-  }
+const myTestEnum = new GraphQLEnumType({
+  name: 'MyTestEnum',
+  values: {
+    OFF: {
+      value: 0,
+      description: 'off.',
+    },
+    ON: {
+      value: 1,
+      description: 'on.',
+    },
+  },
+});
 
+@suite class TestGraphQLTypedMapType { // eslint-disable-line @typescript-eslint/no-unused-vars
   @test async 'valid no key or type constraint'() {
     const { data, errors } = await graphql(createHelloSchema(GraphQLTypedMapType()), '{ hello(a: { k: "3" }) }');
     expect(data?.hello).equals('hello');
@@ -44,6 +56,13 @@ function createHelloSchema(type: GraphQLScalarType) {
     const { data, errors } = await graphql(createHelloSchema(GraphQLTypedMapType(undefined, undefined, GraphQLString)), '{ hello(a: { k: "3" }) }');
     expect(data?.hello).equals('hello');
     expect(errors).is.undefined;
+  }
+
+  @test async 'take an enum'() {
+    const { data, errors } = await graphql(createHelloSchema(GraphQLTypedMapType(undefined, undefined, myTestEnum)), '{ hello(a: { k: "ON" }) }');
+    expect(data?.hello).equals('hello');
+    expect(errors).is.undefined;
+
   }
 
   @test async 'invalid type'() {

@@ -15,14 +15,13 @@
     "sourceMap": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "lib": ["ES2020", "dom"],
+    "lib": ["ES2020", "DOM"],
     "target": "ES6",
-    "types": [],
+    "typeRoots": ["./typings/"]
   },
   "compileOnSave": true,
   "exclude": [
     "node_modules/*",
-    "**/*-aot.ts",
-    "tests/**"
+    "**/*-aot.ts"
   ]
 }

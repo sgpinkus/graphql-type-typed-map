@@ -1,6 +1,6 @@
 {
   "name": "graphql-type-typed-map",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "",
   "files": [
     "dist/"
@@ -13,16 +13,26 @@
     "build:es": "tsc -b tsconfig.es.json",
     "build:js": "tsc",
     "clean": "rm -rf dist/*",
-    "lint": "eslint .",
+    "lint": "eslint . ",
     "prepare": "npm run build",
     "test": "mocha --require ts-node/register --extensions ts,tsx 'tests/**/*.{ts,tsx}'",
     "test:watch": "mocha --require ts-node/register --extensions ts,tsx --watch --watch-files src 'tests/**/*.{ts,tsx}'"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:sgpinkus/graphql-type-typed-map.git"
+  },
+  "keywords": [
+    "graphql"
+  ],
+  "bugs": {
+    "url": "https://github.com/sgpinkus/graphql-type-typed-map"
+  },
+  "homepage": "https://github.com/sgpinkus/graphql-type-typed-map",
   "dependencies": {
-    "core-js": "^3.12.1",
+    "core-js-pure": "^3.12.1",
     "graphql": "^15.5.0"
   },
   "devDependencies": {
